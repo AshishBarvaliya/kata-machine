@@ -39,8 +39,9 @@ export default class Queue<T> {
 
         // memory save
         head.next = undefined;
-        if(this.length === 0){
-            this.tail = undefined
+
+        if (this.length === 0) {
+            this.tail = undefined;
         }
 
         return head.value;
