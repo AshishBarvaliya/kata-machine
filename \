@@ -6,26 +6,40 @@ type Node<T> = {
 export default class SinglyLinkedList<T> {
     public length: number;
     private head?: Node<T>;
+    private tail?: Node<T>;
 
     constructor() {
         this.length = 0;
-        this.head = undefined;
+        this.head = this.tail = undefined;
+    }
+
+    debug() {
+        console.log("------------------------------------------------------");
+
+        let curr = this.head;
+        for (let i = 0; i < this.length && curr; i++) {
+            console.log(curr?.value + " -->" + curr?.next?.value);
+            curr = curr.next;
+        }
     }
 
     prepend(item: T): void {
         this.length++;
         if (!this.head) {
-            this.head = { value: item };
+            this.head = this.tail = { value: item };
+            this.debug();
             return;
         }
 
         let head = this.head;
         this.head = { value: item, next: head };
+        this.debug();
     }
 
     insertAt(item: T, idx: number): void {
         if (!this.length) {
             this.append(item);
+            this.debug();
             return;
         }
         let curr = this.head;
@@ -35,23 +49,20 @@ export default class SinglyLinkedList<T> {
         if (curr) {
             curr.next = { value: item, next: curr?.next?.next };
         }
+        this.debug();
     }
 
     append(item: T): void {
+        this.length++;
         let node = { value: item };
-
-        if (!this.head) {
-            this.head = node;
-            this.length++;
+        if (!this.tail) {
+            this.tail = this.head = node;
             return;
         }
 
-        let curr = this.head;
-        while (curr?.next) {
-            curr = curr.next;
-        }
-        curr.next = node;
-        this.length++;
+        this.tail.next = node;
+        this.tail = node;
+        this.debug();
     }
 
     remove(item: T): T | undefined {
@@ -75,7 +86,7 @@ export default class SinglyLinkedList<T> {
             if (ind === 0) {
                 this.head = curr?.next;
             }
-
+            this.debug();
             return value;
         }
         return undefined;
@@ -88,6 +99,7 @@ export default class SinglyLinkedList<T> {
             curr = curr.next;
         }
 
+        this.debug();
         return curr?.value;
     }
     removeAt(idx: number): T | undefined {
@@ -106,6 +118,7 @@ export default class SinglyLinkedList<T> {
                 this.head = curr?.next;
             }
 
+            this.debug();
             this.length--;
             return curr.value;
         }
